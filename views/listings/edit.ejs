@@ -1,0 +1,49 @@
+<% layout('/layout/boilerplate.ejs') -%>
+   <div class="container">
+    <div class="new-listing">
+        <h3 class="text-center mb-4">Edit Listing - <%= data.title %> Listing</h3>
+
+        <form action="/updatelisting/<%= data.id %>?_method=PUT" method="POST">
+            
+            <div class="form-group">
+                <label for="title" style="color: #df2086;">Title</label>
+                <input type="text" class="form-control item" id="title" name="list[title]" value="<%= data.title %>" placeholder="Enter Title">
+            </div>
+
+            <div class="form-group">
+                <label for="description" style="color: #df2086;">Description</label>
+                <textarea class="form-control item" id="description" name="list[description]" placeholder="Enter Description"><%= data.description %></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="image" style="color: #df2086;">Image URL</label>
+                <input type="text" class="form-control item" id="image" name="list[image]" value="<%= data.image.url %>" placeholder="Enter image URL/link">
+            </div>
+
+            <div class="form-group">
+                <label for="price" style="color: #df2086;">Price</label>
+                <input type="number" class="form-control item" id="price" name="list[price]" value="<%= data.price %>" placeholder="Enter Price">
+            </div>
+
+            <div class="form-group">
+                <label for="country" style="color: #df2086;">Country</label>
+                <input type="text" class="form-control item" id="country" name="list[country]" value="<%= data.country %>" placeholder="Enter Country">
+            </div>
+
+            <div class="form-group">
+                <label for="location" style="color: #df2086;">Location</label>
+                <input type="text" class="form-control item" id="location" name="list[location]" value="<%= data.location %>" placeholder="Enter Location">
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-block create-account">Update Listing</button>
+            </div>
+        </form>
+
+        <div class="form-group text-center mt-4">
+            <a href="/listings/<%= data._id %>">
+                <button type="button" class="btn btn-info">Back</button>
+            </a>
+        </div>
+    </div>
+</div>

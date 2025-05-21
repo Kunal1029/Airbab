@@ -1,0 +1,43 @@
+<% layout('/layout/boilerplate.ejs') -%>
+
+<div class="container">
+  <h3 class="text-center mb-4 mt-4">Listing Details :</h3>
+  <div class="row col-6 m-auto">
+    
+      <div class="card">
+        <img
+          src="<%= Onelisting.image.url %>"
+          style="height: 20rem"
+          class="card-img-top"
+          alt="..."
+        />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b class=""><%= Onelisting.title %></b>
+            <br /> <br>
+           <b>Description</b> : <%= Onelisting.description %>
+            <br />
+           <b>Price</b> : <%= Onelisting.price.toLocaleString("en-IN", { style: "currency",
+            currency: "INR"}) %>
+
+            <br />
+            <b>Location </b>: <%= Onelisting.location %>
+            <br />
+            <b>Country</b> : <%= Onelisting.country %>
+          </p>
+        </div>
+      </div>
+  
+  </div>
+
+  <div class="d-flex justify-content-center gap-3 mb-5">
+    <form action="/edit/<%= Onelisting._id  %>" method="GET">
+      <button class="btn btn-info">Edit</button>
+    </form>
+    <form action="/delete/<%= Onelisting._id  %>?_method=DELETE" method="POST">
+      <button class="btn btn-danger">Delete this listing</button>
+    </form>
+    <a href="/listings"><button type="button" class="btn btn-dark">Back</button></a>
+  </div>
+</div>

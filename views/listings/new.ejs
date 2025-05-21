@@ -1,0 +1,46 @@
+<% layout('/layout/boilerplate.ejs') -%>
+<div class="container" >
+    <div class="new-listing">
+         <h3 class="text-center mb-4">Create New Listing</h3>
+
+        <form action="/addlistings" method="POST">
+           
+            <div class="form-group">
+                <label for="title" style="color: #df2086;">Title</label>
+                <input type="text" class="form-control item" id="title" name="list[title]" placeholder="Enter Title">
+            </div>
+    
+            <div class="form-group">
+                <label for="description"  style="color: #df2086;">Description</label>
+                <textarea class="form-control item" id="description" name="list[description]" placeholder="Enter Description"></textarea>
+            </div>
+    
+            <div class="form-group">
+                <label for="image"  style="color: #df2086;">Image URL</label>
+                <input type="text" class="form-control item" id="image" name="list[image]" placeholder="Enter image URL/link">
+            </div>
+    
+            <div class="form-group">
+                <label for="price"  style="color: #df2086;">Price</label>
+                <input type="number" class="form-control item" id="price" name="list[price]" placeholder="Enter Price">
+            </div>
+    
+            <div class="form-group">
+                <label for="country"  style="color: #df2086;">Country</label>
+                <input type="text" class="form-control item" id="country" name="list[country]" placeholder="Enter Country">
+            </div>
+    
+            <div class="form-group">
+                <label for="location"  style="color: #df2086;">Location</label>
+                <input type="text" class="form-control item" id="location" name="list[location]" placeholder="Enter Location">
+            </div>
+    
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-block create-account">Add Listing</button>
+            </div>
+        </form>
+    
+       
+    </div>
+</div>
+
