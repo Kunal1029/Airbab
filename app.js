@@ -5,7 +5,10 @@ const Listing = require("./models/listing.js")
 const path = require("path")
 const methodOverride = require("method-override");
 const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust2";
-const engine = require("ejs-mate")
+const engine = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js")
+const ExpressError = require("./utils/ExpressError.js")
+const { listingSchema } = require("./schema")
 
 main().then(() => {
     console.log("Connected to DB")
@@ -27,81 +30,114 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", engine);
-app.use(express.static(path.join(__dirname,"/public")))
+app.use(express.static(path.join(__dirname, "/public")))
+
+const validateListing = (req, res, next)=>{ //this is mw for validation in form, client & server side both
+    const {error} = listingSchema.validate(req.body); //x-www-form-urlencoded (Postman) - api runs in this only
+    if(error){
+        let erroMsg = error.details.map((mp)=> mp.message).join(",") // this is extraction of [[object]]
+        throw new ExpressError(400, erroMsg)
+    }else{
+        next();
+    }
+}
 
 app.get("/", (req, res) => {
     res.send("Hi")
 })
 
 //index routes
-app.get("/listings", async (req, res) => {
+app.get("/api/listings", async (req, res) => {
     const allListings = await Listing.find({})
     res.render("listings/index.ejs", { allListings })
 })
 
-
 //new route
-app.get("/listings/new", (req, res) => {
+app.get("/api/listings/new", (req, res) => {
     res.render("listings/new.ejs");
 })
 
-
 //show route
-app.get("/listings/:id", async (req, res) => {
+app.get("/api/listings/:id", async (req, res) => {
     const { id } = req.params;
     const Onelisting = await Listing.findById(id);
     res.render("listings/show.ejs", { Onelisting });
 })
 
-
-//create route 
-app.post("/addlistings", async (req,res)=>{
-    // let {title, description , image, price, country, location} = req.body;
-
-    let newListing = new Listing(req.body.list);
-    await newListing.save();
-    res.redirect("/listings");
-})
-
 //edit route
-app.get("/edit/:id", async (req,res)=>{
+app.get("/api/edit/:id", async (req, res) => {
     let id = req.params.id;
     let data = await Listing.findById(id)
-    res.render("listings/edit.ejs", {data})
+    res.render("listings/edit.ejs", { data })
 })
+
+//create route 
+app.post("/api/addlistings", validateListing, wrapAsync(async (req, res, next) => {
+    // let {title, description , image, price, country, location} = req.body;
+    // if(!req.body.list){
+    //     throw new ExpressError(400, "Send Valid data for listings")
+    // } //this only make sure at least one field should present only
+    // console.log(req.body)
+    // let validateSchemaError = listingSchema.validate(req.body); //x-www-form-urlencoded (Postman) - api runs in this only
+    // // console.log(validateSchemaError) // this will show error and field which is not present
+    // if(validateSchemaError.error){
+    //     throw new ExpressError(400, validateSchemaError.error)
+    // }
+    const newListing = new Listing(req.body.list);
+    await newListing.save();
+    res.redirect("/api/listings");
+
+}))
 
 //update
-app.put("/updatelisting/:id", async (req,res)=>{
+app.put("/api/updatelisting/:id", validateListing ,wrapAsync(async (req, res) => {
     let id = req.params.id;
-    let data = req.body.list;
-    await Listing.findByIdAndUpdate(id, {...req.body.list});
-    res.redirect(`/listings/${id}`);
-})
+    // let data = req.body.list;
+    await Listing.findByIdAndUpdate(id, { ...req.body.list });
+    res.redirect(`/api/listings/${id}`);
+}))
 
 //delete
-app.delete("/delete/:id", async (req,res)=>{
+app.delete("/api/delete/:id", wrapAsync(async (req, res) => {
     let id = req.params.id;
     await Listing.findByIdAndDelete(id);
-    res.redirect("/listings")
+    res.redirect("/api/listings")
+}));
+
+app.all("*", (req,res, next)=>{
+    next(new ExpressError(404,"Page Not Found"))
+});
+
+app.use((err, req, res, next) => {
+    // console.log(err)
+    let {statusCode = 500, message = "Something went Wrong!"} = err;
+    // res.status(statusCode).send(message);
+    res.status(statusCode).render("Error.ejs" , {err})
+    // res.send("Something went Wrong -> ", kunal)
 })
 
-app.get("/checkingFunction", (req, res) => {
-    // (async()=>{
-    //     try {
-    //         const data = await Listing.find({});
-    //         res.send(data);
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // })(); //immediately invoked function expression
+// //this is for empty route or invalid route
+// app.use((req, res) => {
+//     res.send("Something went Wrong, Invalid route")
+// })
 
-    const ks = async () => {
-        const data = await Listing.find({});
-        res.send(data);
-    }
+// app.get("/checkingFunction", (req, res) => {
+//     // (async()=>{
+//     //     try {
+//     //         const data = await Listing.find({});
+//     //         res.send(data);
+//     //     } catch (error) {
+//     //         console.log(error)
+//     //     }
+//     // })(); //immediately invoked function expression
 
-    ks();
-})
+//     const ks = async () => {
+//         const data = await Listing.find({});
+//         res.send(data);
+//     }
+
+//     ks();
+// })
 
 // app.get("/listings", async (req, res) => {
 //     const data = await Listing.find({});

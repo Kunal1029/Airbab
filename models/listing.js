@@ -4,7 +4,7 @@ const schema = mongoose.Schema;
 const listingSchema = new schema({
     title: {
         type: String,
-        required: true,
+        
         set: v => v.trim()
     },
     description: String,
