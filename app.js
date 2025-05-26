@@ -8,7 +8,8 @@ const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust2";
 const engine = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema } = require("./schema")
+const { listingSchema, reviewSchema } = require("./schema")
+const Review = require("./models/review.js")
 
 main().then(() => {
     console.log("Connected to DB")
@@ -32,12 +33,22 @@ app.use(methodOverride("_method"));
 app.engine("ejs", engine);
 app.use(express.static(path.join(__dirname, "/public")))
 
-const validateListing = (req, res, next)=>{ //this is mw for validation in form, client & server side both
-    const {error} = listingSchema.validate(req.body); //x-www-form-urlencoded (Postman) - api runs in this only
-    if(error){
-        let erroMsg = error.details.map((mp)=> mp.message).join(",") // this is extraction of [[object]]
+const validateListing = (req, res, next) => { //this is mw for validation in form, client & server side both
+    const { error } = listingSchema.validate(req.body); //x-www-form-urlencoded (Postman) - api runs in this only
+    if (error) {
+        let erroMsg = error.details.map((mp) => mp.message).join(",") // this is extraction of [[object]]
         throw new ExpressError(400, erroMsg)
-    }else{
+    } else {
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let erroMsg = error.details.map((mp) => mp.message).join(",")
+        throw new ExpressError(400, erroMsg)
+    } else {
         next();
     }
 }
@@ -60,7 +71,7 @@ app.get("/api/listings/new", (req, res) => {
 //show route
 app.get("/api/listings/:id", async (req, res) => {
     const { id } = req.params;
-    const Onelisting = await Listing.findById(id);
+    const Onelisting = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs", { Onelisting });
 })
 
@@ -90,7 +101,7 @@ app.post("/api/addlistings", validateListing, wrapAsync(async (req, res, next) =
 }))
 
 //update
-app.put("/api/updatelisting/:id", validateListing ,wrapAsync(async (req, res) => {
+app.put("/api/updatelisting/:id", validateListing, wrapAsync(async (req, res) => {
     let id = req.params.id;
     // let data = req.body.list;
     await Listing.findByIdAndUpdate(id, { ...req.body.list });
@@ -104,15 +115,36 @@ app.delete("/api/delete/:id", wrapAsync(async (req, res) => {
     res.redirect("/api/listings")
 }));
 
-app.all("*", (req,res, next)=>{
-    next(new ExpressError(404,"Page Not Found"))
+//Reviews routes
+app.post("/api/listing/:id/review", validateReview, wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review)
+
+    listing.reviews.push(newReview)
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/api/listings/${req.params.id}`)
+}));
+
+app.delete("/api/listing/:id/review/:reviewId", wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, { pull: { reviews: reviewId } })
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/api/listings/${id}`)
+    // alert(req.params)
+}))
+
+app.all("*", (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"))
 });
 
 app.use((err, req, res, next) => {
     // console.log(err)
-    let {statusCode = 500, message = "Something went Wrong!"} = err;
+    let { statusCode = 500, message = "Something went Wrong!" } = err;
     // res.status(statusCode).send(message);
-    res.status(statusCode).render("Error.ejs" , {err})
+    res.status(statusCode).render("Error.ejs", { err })
     // res.send("Something went Wrong -> ", kunal)
 })
 
