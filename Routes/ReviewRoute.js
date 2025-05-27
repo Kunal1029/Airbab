@@ -1,0 +1,30 @@
+const Express = require("express");
+const Rrouter = Express.Router({mergeParams: true}); 
+const Review = require("../models/review.js")
+const Listing = require("../models/listing.js")
+const {wrapAsync ,  validateReview} = require("../utils/CommonFile.js")
+
+//Reviews routes
+Rrouter.post("/", validateReview, wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review)
+
+    listing.reviews.push(newReview)
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/api/list/show/${req.params.id}`)
+}));
+
+Rrouter.delete("/:reviewId", wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, { pull: { reviews: reviewId } })
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/api/list/show/${id}`)
+    // alert(req.params)
+}))
+
+
+module.exports = Rrouter;
+

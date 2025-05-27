@@ -31,16 +31,16 @@
   </div>
 
   <div class="d-flex justify-content-center gap-3 mb-5">
-    <form action="/api/edit/<%= Onelisting._id  %>" method="GET">
+    <form action="/api/list/edit/<%= Onelisting._id  %>" method="GET">
       <button class="btn btn-info">Edit</button>
     </form>
     <form
-      action="/api/delete/<%= Onelisting._id  %>?_method=DELETE"
+      action="/api/list/delete/<%= Onelisting._id  %>?_method=DELETE"
       method="POST"
     >
       <button class="btn btn-danger">Delete this listing</button>
     </form>
-    <a href="/api/listings"
+    <a href="/api/list"
       ><button type="button" class="btn btn-dark">Back</button></a
     >
   </div>
@@ -51,7 +51,7 @@
     <div class="col-6" >
 
       <h4 class="mt-4 text-center mb-3">Please Leave a Review</h4>
-      <form method="POST" action="/api/listing/<%= Onelisting._id %>/review" novalidate class="needs-validation">
+      <form method="POST" action="/api/review/<%= Onelisting._id %>/review" novalidate class="needs-validation">
         <div class="form-group">
           <label for="comment" class="form-label">Comment</label>
           <textarea cols="20" required rows="3" class="form-control mb-2" id="comment" name="review[comment]" placeholder="Comment Here"></textarea>
@@ -76,7 +76,7 @@
         <% for(review of Onelisting.reviews) { %>
          <div class="border p-3 mb-3">
            <p class=" p-2 col-8">Comment: <%= review.comment %>,<br>Rating: <%= review.rating %> Star</p>
-           <form action="/api/listing/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE" method="post"> 
+           <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE" method="post"> 
              <button class="btn btn-dark mb-2 mt-2">Delete</button>
            </form>
          </div>

@@ -4,7 +4,7 @@
   <h3 class="text-center mt-4 mb-4">All Listing</h3>
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
     <% for(let Listing of allListings) { %>
-    <a href="listings/<%=Listing._id %>" class="listing-link">
+    <a href="/api/list/show/<%=Listing._id %>" class="listing-link">
       <div class="card">
         <img
           src="<%= Listing.image.url %>"

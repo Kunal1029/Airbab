@@ -4,16 +4,17 @@
     <h3 class="text-center mb-4">Edit Listing - <%= data.title %> Listing</h3>
 
     <form
-      action="/api/updatelisting/<%= data.id %>?_method=PUT"
+      action="/api/list/updatelisting/<%= data.id %>?_method=PUT"
       method="POST"
       noValidate
       class="needs-validation"
     >
       <div class="form-group mb-4">
         <label for="title" style="color: #df2086">Title</label>
-        <input required
+        <input
+          required
           type="text"
-          class="form-control mb-2 "
+          class="form-control mb-2"
           id="title"
           name="list[title]"
           value="<%= data.title %>"
@@ -25,8 +26,8 @@
       <div class="form-group mb-4">
         <label for="description" style="color: #df2086">Description</label>
         <textarea
-         required
-          class="form-control mb-2 "
+          required
+          class="form-control mb-2"
           id="description"
           name="list[description]"
           placeholder="Enter Description"
@@ -38,9 +39,10 @@
 
       <div class="form-group mb-4">
         <label for="image" style="color: #df2086">Image URL</label>
-        <input required
+        <input
+          required
           type="text"
-          class="form-control mb-2 "
+          class="form-control mb-2"
           id="image"
           name="list[image]"
           value="<%= data.image.url %>"
@@ -51,9 +53,10 @@
 
       <div class="form-group mb-4">
         <label for="price" style="color: #df2086">Price</label>
-        <input required
+        <input
+          required
           type="text"
-          class="form-control mb-2 "
+          class="form-control mb-2"
           id="price"
           name="list[price]"
           value="<%= data.price %>"
@@ -64,9 +67,10 @@
 
       <div class="form-group mb-4">
         <label for="country" style="color: #df2086">Country</label>
-        <input required
+        <input
+          required
           type="text"
-          class="form-control mb-2 "
+          class="form-control mb-2"
           id="country"
           name="list[country]"
           value="<%= data.country %>"
@@ -77,9 +81,10 @@
 
       <div class="form-group mb-4">
         <label for="location" style="color: #df2086">Location</label>
-        <input required
+        <input
+          required
           type="text"
-          class="form-control mb-2 "
+          class="form-control mb-2"
           id="location"
           name="list[location]"
           value="<%= data.location %>"
@@ -96,7 +101,7 @@
     </form>
 
     <div class="form-group mb-4 text-center mt-4">
-      <a href="/api/listings/<%= data._id %>">
+      <a href="/api/list/show/<%= data._id %>">
         <button type="button" class="btn btn-info">Back</button>
       </a>
     </div>
