@@ -58,14 +58,21 @@ app.get("/", (req, res) => {
 })
 
 //index routes
-app.get("/api/listings", async (req, res) => {
+app.get("/api/listings", wrapAsync(async (req, res) => {
     const allListings = await Listing.find({})
     res.render("listings/index.ejs", { allListings })
-})
+}))  //If an error happens inside an async route handler without a try/catch or wrapAsync, the error won’t be passed to Express’s error middleware, and your app might crash or hang.
 
 //new route
-app.get("/api/listings/new", (req, res) => {
-    res.render("listings/new.ejs");
+app.get("/api/listings/new", (req, res, next) => {
+    // res.render("listings/new.ejs");
+    res.render("listings/new.ejs", (err, html) => {
+        if (err) {
+            return next(new ExpressError("Failed to render page", 300)); // pass to error handler
+        } else {
+            res.send(html);
+        }
+    });
 })
 
 //show route
