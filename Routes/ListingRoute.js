@@ -27,6 +27,10 @@ Lrouter.get("/new", (req, res, next) => {
 Lrouter.get("/show/:id", async (req, res) => {
     const { id } = req.params;
     const Onelisting = await Listing.findById(id).populate("reviews");
+    if(!Onelisting){
+        req.flash("error","Listing Doesn't exist.")
+        res.redirect("/api/list")
+    }
     res.render("listings/show.ejs", { Onelisting });
 })
 
@@ -34,6 +38,10 @@ Lrouter.get("/show/:id", async (req, res) => {
 Lrouter.get("/edit/:id", async (req, res) => {
     let id = req.params.id;
     let data = await Listing.findById(id)
+    if(!data){
+        req.flash("error","Listing Doesn't exist.")
+        res.redirect("/api/list")
+    }
     res.render("listings/edit.ejs", { data })
 })
 
@@ -51,8 +59,8 @@ Lrouter.post("/addlistings", validateListing, wrapAsync(async (req, res, next) =
     // }
     const newListing = new Listing(req.body.list);
     await newListing.save();
+    req.flash("success","New Listing Created")
     res.redirect("/api/list");
-
 }))
 
 //update
@@ -60,6 +68,7 @@ Lrouter.put("/updatelisting/:id", validateListing, wrapAsync(async (req, res) =>
     let id = req.params.id;
     // let data = req.body.list;
     await Listing.findByIdAndUpdate(id, { ...req.body.list });
+    req.flash("success",`Listing Edit Successfully`)
     res.redirect(`/api/list/show/${id}`);
 }))
 
@@ -67,6 +76,7 @@ Lrouter.put("/updatelisting/:id", validateListing, wrapAsync(async (req, res) =>
 Lrouter.delete("/delete/:id", wrapAsync(async (req, res) => {
     let id = req.params.id;
     await Listing.findByIdAndDelete(id);
+    req.flash("success",`Listing Deleted Successfully`)
     res.redirect("/api/list")
 }));
 

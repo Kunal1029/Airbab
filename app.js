@@ -9,6 +9,8 @@ const ExpressError = require("./utils/ExpressError.js")
 const Lrouter  = require("./Routes/ListingRoute.js")
 const Rrouter  = require("./Routes/ReviewRoute.js")
 const cookieParser = require("cookie-parser")
+const serverSession = require("express-session");
+const flash = require("connect-flash")
 
 main().then(() => {
     console.log("Connected to DB")
@@ -20,8 +22,22 @@ async function main() {
     await mongoose.connect(mongoUrl);
 }
 
+const sessionOptions = {
+    secret: "mySecretKey",
+    resave: false, 
+    saveUninitialized: true,
+    cookie:{
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+    }
+}
 
-app.use(cookieParser());
+app.use(serverSession(sessionOptions))
+app.use(cookieParser()); 
+app.use(flash())
+
+
 // I will use EJS templates(blueprint (which contains html + variable)) to render my HTML pages.
 app.set("view engine", "ejs"); //ejs (embedded javascript) - Embedded means inserted or placed inside something else
 app.set("views", path.join(__dirname, "views"));
@@ -39,6 +55,12 @@ app.get("/", (req, res) => {
     res.send("Hi")
 })
 
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    return next();
+})
+
 app.use("/api/list",Lrouter)
 app.use("/api/review/:id/review",Rrouter)
 
@@ -48,7 +70,6 @@ app.all("*", (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    // console.log(err)
     let { statusCode = 500, message = "Something went Wrong!" } = err;
     // res.status(statusCode).send(message);
     res.status(statusCode).render("Error.ejs", { err })
