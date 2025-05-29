@@ -8,9 +8,13 @@ const engine = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js")
 const Lrouter  = require("./Routes/ListingRoute.js")
 const Rrouter  = require("./Routes/ReviewRoute.js")
+const userRouter  = require("./Routes/UserRoute.js")
 const cookieParser = require("cookie-parser")
 const serverSession = require("express-session");
 const flash = require("connect-flash")
+const passport = require("passport")
+const localStrategyPass = require("passport-local")
+const userSchema = require("./models/User.js")
 
 main().then(() => {
     console.log("Connected to DB")
@@ -36,6 +40,12 @@ const sessionOptions = {
 app.use(serverSession(sessionOptions))
 app.use(cookieParser()); 
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.use(new localStrategyPass(userSchema.authenticate()))
+passport.serializeUser(userSchema.serializeUser());
+passport.deserializeUser(userSchema.deserializeUser());
 
 
 // I will use EJS templates(blueprint (which contains html + variable)) to render my HTML pages.
@@ -51,16 +61,17 @@ app.engine("ejs", engine);
 app.use(express.static(path.join(__dirname, "/public")))
 
 
-app.get("/", (req, res) => {
-    res.send("Hi")
-})
-
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     return next();
 })
 
+app.get("/", (req, res) => {
+    res.send("Hi")
+})
+
+app.use("/", userRouter)
 app.use("/api/list",Lrouter)
 app.use("/api/review/:id/review",Rrouter)
 
