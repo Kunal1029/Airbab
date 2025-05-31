@@ -34,7 +34,7 @@
   </div>
 
   <div class="d-flex justify-content-center gap-3 mb-5">
-    <% if(currentUser && currentUser && currentUser._id.toString() ===
+    <% if(currentUser && currentUser._id.toString() ===
     Onelisting.owner._id.toString()) { %>
     <form action="/api/list/edit/<%= Onelisting._id  %>" method="GET">
       <button class="btn btn-info">Edit</button>
@@ -55,7 +55,8 @@
 
   <div class="mb-5 d-flex">
     <div class="col-6">
-      <h4 class="mt-4 text-center mb-3">Please Leave a Review</h4>
+      <h4 class="mt-4 text-center mb-3">Please Leave a Review <%=  %></h4>
+
       <% if(currentUser) { %>
       <form
         method="POST"
@@ -97,6 +98,7 @@
         </div>
       </form>
       <% } %>
+
     </div>
 
     <div class="col-6">
@@ -110,12 +112,32 @@
             Comment: <%= review.comment %>,<br />Rating: <%= review.rating %>
             Star
           </p>
+          <p>comment by : @<%= review.author.username %></p>
+
+          <% if(review.author._id.toString() === currentUser._id.toString()) { %>
           <form
             action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
             method="post"
           >
             <button class="btn btn-dark mb-2 mt-2">Delete</button>
           </form>
+
+          <form
+            // action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+            method="post"
+          >
+            <button class="btn btn-dark mb-2 mt-2">Reply</button>
+          </form>
+          <% } else { %>
+             <form
+            // action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+            method="post"
+          >
+            <button class="btn btn-dark mb-2 mt-2">Reply</button>
+        
+          </form>
+            <% } %>
+            
         </div>
         <% } %>
       </div>
