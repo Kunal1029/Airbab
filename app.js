@@ -64,6 +64,8 @@ app.use(express.static(path.join(__dirname, "/public")))
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currentUser = req.user? req.user : "no-user";
+    res.locals.isAuthenticate = req.isAuthenticated() ? "yes" : "no";
     return next();
 })
 

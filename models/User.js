@@ -11,10 +11,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    // password: {
-    //     type: String,
-    //     required: true
-    // }
 })
 
 userSchema.plugin(plm); //it will automatically generate username, hasing, salting, hashpassword

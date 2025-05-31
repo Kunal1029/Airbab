@@ -10,8 +10,11 @@
         class="card-img-top"
         alt="..."
       />
-      <div class="card-img-overlay"></div>
+      <div class="card-img-overlay"><%= Onelisting.owner.username %></div>
       <div class="card-body">
+        <p>
+          <i>Published by: <b><%= Onelisting.owner.username %></b></i>
+        </p>
         <p class="card-text">
           <b class=""><%= Onelisting.title %></b>
           <br />
@@ -31,6 +34,8 @@
   </div>
 
   <div class="d-flex justify-content-center gap-3 mb-5">
+    <% if(currentUser && currentUser && currentUser._id.toString() ===
+    Onelisting.owner._id.toString()) { %>
     <form action="/api/list/edit/<%= Onelisting._id  %>" method="GET">
       <button class="btn btn-info">Edit</button>
     </form>
@@ -40,49 +45,80 @@
     >
       <button class="btn btn-danger">Delete this listing</button>
     </form>
+    <% } %>
     <a href="/api/list"
       ><button type="button" class="btn btn-dark">Back</button></a
     >
   </div>
 
-  <hr/>
+  <hr />
 
   <div class="mb-5 d-flex">
-    <div class="col-6" >
-
+    <div class="col-6">
       <h4 class="mt-4 text-center mb-3">Please Leave a Review</h4>
-      <form method="POST" action="/api/review/<%= Onelisting._id %>/review" novalidate class="needs-validation">
+      <% if(currentUser) { %>
+      <form
+        method="POST"
+        action="/api/review/<%= Onelisting._id %>/review"
+        novalidate
+        class="needs-validation"
+      >
         <div class="form-group">
           <label for="comment" class="form-label">Comment</label>
-          <textarea cols="20" required rows="3" class="form-control mb-2" id="comment" name="review[comment]" placeholder="Comment Here"></textarea>
+          <textarea
+            cols="20"
+            required
+            rows="3"
+            class="form-control mb-2"
+            id="comment"
+            name="review[comment]"
+            placeholder="Comment Here"
+          ></textarea>
           <div class="invalid-feedback">Please Comment Correctly.</div>
         </div>
-  
-        <div class="form-group mt-4 ">
-          <label for="rating" class="form-label">Give Rating betwen 1 to 5</label><br>
-          <input type="range" required name="review[rating]" min="1" max="5" id="rating" class="">
-  
+
+        <div class="form-group mt-4">
+          <label for="rating" class="form-label"
+            >Give Rating betwen 1 to 5</label
+          ><br />
+          <input
+            type="range"
+            required
+            name="review[rating]"
+            min="1"
+            max="5"
+            id="rating"
+            class=""
+          />
         </div>
-  
+
         <div class="text-center">
           <button class="btn btn-warning">Submit</button>
         </div>
       </form>
+      <% } %>
     </div>
 
     <div class="col-6">
-      <h4 class="mt-4 text-center">All Reviews on <b class="text-warning"> "<%= Onelisting.title %>"</b></h4>
+      <h4 class="mt-4 text-center">
+        All Reviews on <b class="text-warning"> "<%= Onelisting.title %>"</b>
+      </h4>
       <div class="ms-5 mt-5">
         <% for(review of Onelisting.reviews) { %>
-         <div class="border p-3 mb-3">
-           <p class=" p-2 col-8">Comment: <%= review.comment %>,<br>Rating: <%= review.rating %> Star</p>
-           <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE" method="post"> 
-             <button class="btn btn-dark mb-2 mt-2">Delete</button>
-           </form>
-         </div>
-        <% } %>
+        <div class="border p-3 mb-3">
+          <p class="p-2 col-8">
+            Comment: <%= review.comment %>,<br />Rating: <%= review.rating %>
+            Star
+          </p>
+          <form
+            action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+            method="post"
+          >
+            <button class="btn btn-dark mb-2 mt-2">Delete</button>
+          </form>
         </div>
+        <% } %>
+      </div>
     </div>
   </div>
-
 </div>
