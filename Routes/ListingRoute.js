@@ -8,6 +8,11 @@ const {
 } = require("../utils/CommonFile.js");
 const { isLoggedIn, isOwner } = require("../middleware.js");
 
+const multer = require("multer") //require, we using multer for parsing form data of filetype.
+const { storage } = require("../cloudConfig.js");
+// const uploadTo = multer({dest: 'myfiletype/'}) //initialize, multer fetch files data from forms and automatically create folder 'myfiletype' for saving our file/image.
+const uploadTo = multer({storage}) 
+
 //index routes
 Lrouter.get(
   "/",
@@ -27,15 +32,24 @@ Lrouter.get("/edit/:id", isLoggedIn, isOwner, wrapAsync(ListingController.editLi
 Lrouter.post(
   "/addlistings",
   isLoggedIn,
+  uploadTo.single("list[image]"),
   validateListing,
   wrapAsync(ListingController.addNewList)
 );
 
+//image upload to clodinary test or practice
+// Lrouter.post("/addlistings",uploadTo.single("list[image]"),  (req,res)=>{ 
+//   console.log(req.file)
+//   res.send(JSON.stringify(req.body) + " ~~~~~~~ " + JSON.stringify(req.file));
+// })
+
 //update
+
 Lrouter.put(
   "/updatelisting/:id",
   isLoggedIn,
   isOwner,
+  uploadTo.single("list[image]"),
   validateListing,
   wrapAsync(ListingController.updateOne)
 );
