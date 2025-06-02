@@ -38,7 +38,9 @@ module.exports.editList = async (req, res) => {
         req.flash("error", "Listing Doesn't exist.");
         res.redirect("/api/list");
     }
-    res.render("listings/edit.ejs", { data });
+    let originalImageUrl = data.image.url;
+    originalImageUrl =originalImageUrl.replace("/upload","/upload/h_200,w_250")
+    res.render("listings/edit.ejs", { data , originalImageUrl });
 }
 
 module.exports.addNewList = async (req, res, next) => {
