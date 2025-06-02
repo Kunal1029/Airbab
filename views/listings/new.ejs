@@ -1,107 +1,56 @@
 <% layout('/layout/boilerplate.ejs') -%>
-<div class="container">
-  <div class="new-listing">
-    <h3 class="text-center mb-4">Create New Listing</h3>
+  <div class="container">
+    <div class="new-listing">
+      <h3 class="text-center mb-4">Create New Listing</h3>
 
-    <form
-      action="/api/list/addlistings"
-      method="POST"
-      noValidate
-      class="needs-validation"
-    >
-      <div class="form-group mb-4">
-        <label for="title" class="form-label" style="color: #df2086"
-          >Title</label
-        >
-        <input
-          type="text"
-          required
-          class="form-control mb-2"
-          id="title"
-          name="list[title]"
-          placeholder="Enter Title"
-        />
-        <div class="invalid-feedback"><b>Please Enter Title</b></div>
-      </div>
+      <form action="/api/list/addlistings" method="POST" noValidate class="needs-validation"
+      enctype="multipart/form-data">
+        <div class="form-group mb-4">
+          <label for="title" class="form-label" style="color: #df2086">Title</label>
+          <input type="text" required class="form-control mb-2" id="title" name="list[title]"
+            placeholder="Enter Title" />
+          <div class="invalid-feedback"><b>Please Enter Title</b></div>
+        </div>
 
-      <div class="form-group mb-4">
-        <label for="description" class="form-label" style="color: #df2086"
-          >Description</label
-        >
-        <textarea
-          class="form-control mb-2"
-          required
-          id="description"
-          name="list[description]"
-          placeholder="Enter Description"
-        ></textarea>
-        <div class="invalid-feedback"><b>Please Enter Description</b></div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="description" class="form-label" style="color: #df2086">Description</label>
+          <textarea class="form-control mb-2" required id="description" name="list[description]"
+            placeholder="Enter Description"></textarea>
+          <div class="invalid-feedback"><b>Please Enter Description</b></div>
+        </div>
 
-      <div class="form-group mb-4">
-        <label for="image" class="form-label" style="color: #df2086"
-          >Image URL</label
-        >
-        <input
-          type="text"
-          class="form-control mb-2"
-          id="image"
-          name="list[image]"
-          placeholder="Enter image URL/link"
-        />
-        <div class="invalid-feedback"><b>Image Required</b></div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="image" class="form-label" style="color: #df2086">Upload Image</label>
+          <input type="file" class="form-control mb-2" id="image" name="list[image]" required placeholder="Upload File/image" />
+          <div class="invalid-feedback"><b>Image Required</b></div>
+        </div>
 
-      <div class="form-group mb-4">
-        <label for="price" class="form-label" style="color: #df2086"
-          >Price</label
-        >
-        <input
-          type="text"
-          required
-          class="form-control mb-2"
-          id="price"
-          name="list[price]"
-          placeholder="Enter Price"
-        />
-        <div class="invalid-feedback"><b>Please Enter Valid Price.</b></div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="price" class="form-label" style="color: #df2086">Price</label>
+          <input type="text" required class="form-control mb-2" id="price" name="list[price]"
+            placeholder="Enter Price" />
+          <div class="invalid-feedback"><b>Please Enter Valid Price.</b></div>
+        </div>
 
-      <div class="form-group mb-4">
-        <label for="country" class="form-label" style="color: #df2086"
-          >Country</label
-        >
-        <input
-          type="text"
-          required
-          class="form-control mb-2"
-          id="country"
-          name="list[country]"
-          placeholder="Enter Country"
-        />
-        <div class="invalid-feedback"><b>Please Enter Country</b></div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="country" class="form-label" style="color: #df2086">Country</label>
+          <input type="text" required class="form-control mb-2" id="country" name="list[country]"
+            placeholder="Enter Country" />
+          <div class="invalid-feedback"><b>Please Enter Country</b></div>
+        </div>
 
-      <div class="form-group mb-4">
-        <label for="location" class="form-label" style="color: #df2086"
-          >Location</label
-        >
-        <input
-          type="text"
-          required
-          class="form-control mb-2"
-          id="location"
-          name="list[location]"
-          placeholder="Enter Location"
-        />
-        <div class="invalid-feedback"><b>Please Enter location</b></div>
-      </div>
+        <div class="form-group mb-4">
+          <label for="location" class="form-label" style="color: #df2086">Location</label>
+          <input type="text" required class="form-control mb-2" id="location" name="list[location]"
+            placeholder="Enter Location" />
+          <div class="invalid-feedback"><b>Please Enter location</b></div>
+        </div>
 
-      <div class="form-group mb-4 text-center">
-        <button type="submit" class="btn btn-block create-account">
-          Add Listing
-        </button>
-      </div>
-    </form>
+        <div class="form-group mb-4 text-center">
+          <button type="submit" class="btn btn-block create-account">
+            Add Listing
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>

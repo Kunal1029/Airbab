@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const schema = mongoose.Schema;
-const Review = require("./review.js")
+const Review = require("./review.js");
+const { url } = require("inspector");
 
 const listingSchema = new schema({
     title: {
@@ -10,15 +11,17 @@ const listingSchema = new schema({
     },
     description: String,
     image: {
-        filename: {
-            type: String,
-            default: "listingimage"
-        },
-        url: {
-            type: String,
-            default: "https://assets.cntraveller.in/photos/67060b030871a221e9f6bd88/3:2/w_5004,h_3336,c_limit/GettyImages-520120864.jpg",
-            set: (v) => v === "" ? "https://assets.cntraveller.in/photos/67060b030871a221e9f6bd88/3:2/w_5004,h_3336,c_limit/GettyImages-520120864.jpg" : v
-        }
+        // filename: {
+        //     type: String,   
+        //     default: "listingimage"
+        // },
+        // url: {
+        //     type: String,
+        //     default: "https://assets.cntraveller.in/photos/67060b030871a221e9f6bd88/3:2/w_5004,h_3336,c_limit/GettyImages-520120864.jpg",
+        //     set: (v) => v === "" ? "https://assets.cntraveller.in/photos/67060b030871a221e9f6bd88/3:2/w_5004,h_3336,c_limit/GettyImages-520120864.jpg" : v
+        // }
+        url: String,
+        filename: String
     },
     price: Number,
     location: String,
