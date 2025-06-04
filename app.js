@@ -18,7 +18,8 @@ const serverSession = require("express-session");
 const flash = require("connect-flash")
 const passport = require("passport")
 const localStrategyPass = require("passport-local")
-const userSchema = require("./models/User.js")
+const userSchema = require("./models/User.js");
+const MongoStore = require("connect-mongo"); // ---------------------- use  for production session
 
 main().then(() => {
     console.log("Connected to DB")
@@ -30,8 +31,21 @@ async function main() {
     await mongoose.connect(mongoUrl);
 }
 
+const store = MongoStore.create({
+    mongoUrl: mongoUrl,
+    crypto:{
+        secret : process.env.Ssecret
+    },
+    touchAfter: 24 * 60 * 60,
+})
+
+store.on("error",()=>{
+    console.log("Error in Mongo Session ",err)
+})
+
 const sessionOptions = {
-    secret: "mySecretKey",
+    store, //mongo-connect
+    secret: process.env.Ssecret,
     resave: false, 
     saveUninitialized: true,
     cookie:{
@@ -40,6 +54,7 @@ const sessionOptions = {
         httpOnly: true,
     }
 }
+
 
 app.use(serverSession(sessionOptions))
 app.use(cookieParser()); 
