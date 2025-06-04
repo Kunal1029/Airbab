@@ -7,7 +7,7 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path")
 const methodOverride = require("method-override");
-const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust2";
+const mongoUrl = process.env.MONGO_URL;
 const engine = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js")
 const Lrouter = require("./Routes/ListingRoute.js")
@@ -18,7 +18,8 @@ const serverSession = require("express-session");
 const flash = require("connect-flash")
 const passport = require("passport")
 const localStrategyPass = require("passport-local")
-const userSchema = require("./models/User.js")
+const userSchema = require("./models/User.js");
+const MongoStore = require("connect-mongo"); // ---------------------- use  for production session
 
 main().then(() => {
     console.log("Connected to DB")
@@ -30,7 +31,20 @@ async function main() {
     await mongoose.connect(mongoUrl);
 }
 
+const store = MongoStore.create({
+    mongoUrl: mongoUrl,
+    crypto:{
+        secret : "mykssupersecretcode"
+    },
+    touchAfter: 24 * 60 * 60,
+})
+
+store.on("error",()=>{
+    console.log("Error in Mongo Session ",err)
+})
+
 const sessionOptions = {
+    store, //mongo-connect
     secret: "mySecretKey",
     resave: false, 
     saveUninitialized: true,
@@ -40,6 +54,7 @@ const sessionOptions = {
         httpOnly: true,
     }
 }
+
 
 app.use(serverSession(sessionOptions))
 app.use(cookieParser()); 

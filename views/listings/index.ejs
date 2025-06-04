@@ -2,7 +2,16 @@
 
 
 <div class="container">
+
   <h3 class="text-center mt-4 mb-4">All Listing</h3>
+
+  <div class="tx mb-4">
+    <div class="form-check form-switch">
+      <input class="form-check-input" class="" type="checkbox"  role="switch" id="tax-show">
+      <label class="form-check-label" for="switchCheckDefault">Show Tax</label>
+    </div>
+  </div>
+
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
     <% for(let Listing of allListings) { %>
     <a href="/api/list/show/<%=Listing._id %>" class="listing-link">
@@ -19,7 +28,7 @@
           <p class="card-text">
             <b><%= Listing.title %></b>
             <br />
-            <%= Listing.price %>
+            <%= Listing.price %> &nbsp; <i class="showTax">+18% gst </i> 
           </p>
         </div>
       </div>
@@ -27,3 +36,20 @@
     <% } %>
   </div>
 </div>
+
+<script>
+  let taxShown = document.getElementById("tax-show")
+  
+
+  taxShown.addEventListener("click", ()=>{
+    let ts = document.getElementsByClassName("showTax")
+    for(info of ts){
+      if(info.style.display !== "inline"){
+      info.style.display = "inline"
+     }else{
+      info.style.display = "none"
+     }
+    }
+  })
+
+</script>

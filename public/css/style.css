@@ -149,3 +149,23 @@ body{
 }
 
 /* new list form end*/
+
+.showTax{
+    display: none;
+}
+
+.form-switch{
+    /* border: 2px solid gray; */
+    background-color: yellow;
+    border-radius: 10px;
+    width: 120px;
+    padding: 5px;
+    cursor: pointer;
+}
+.tx{
+    display: flex;
+    align-items: center;
+    /* border: #222222 2px solid; */
+    justify-content: center;
+    
+}
