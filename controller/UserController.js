@@ -13,7 +13,7 @@ module.exports.signUpPage =  (req, res) => {
         email: email,
       });
       let userRegister = await userModel.register(userMail, password);
-      console.log(userRegister);
+      // console.log(userRegister);
 
       //user automatic login after signup
       req.login(userRegister, (err) => {
