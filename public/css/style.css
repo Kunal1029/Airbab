@@ -1,65 +1,72 @@
-body{
+body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.container{
+.container {
     flex: 1;
 }
 
-.navbar{
+.navbar {
     height: 5rem;
     background-color: white;
 }
-.fa-brands{
+
+.fa-brands {
     font-size: 2rem;
 }
-.navbar-brand{
+
+.navbar-brand {
     font-size: 1.7rem !important;
 }
-.nav-link{
+
+.nav-link {
     color: #222222 !important;
     font-weight: 500 !important;
 }
 
 /* cards */
 
-.card{
+.card {
     border: none !important;
     margin-bottom: 2rem;
 }
 
-.card-img-top{
+.card-img-top {
     border-radius: 1rem !important;
     width: 100% !important;
     object-fit: cover !important;
 }
-.card-body{
+
+.card-body {
     padding: 0 !important;
 }
-.card-text p{
+
+.card-text p {
     font-weight: 400;
 }
 
-.listing-link{
+.listing-link {
     text-decoration: none;
 }
-.card-img-overlay{
+
+.card-img-overlay {
     opacity: 0;
 }
-.card-img-overlay:hover{
+
+.card-img-overlay:hover {
     opacity: 0.3;
     background-color: white;
 }
 
 /* new list form */
 
-.new-listing{
-	padding: 50px 0;
+.new-listing {
+    padding: 50px 0;
 }
 
-.new-listing form{
+.new-listing form {
     background-color: #fff;
     max-width: 600px;
     margin: auto;
@@ -69,8 +76,8 @@ body{
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
 }
 
-.new-listing .form-icon{
-	text-align: center;
+.new-listing .form-icon {
+    text-align: center;
     background-color: #5891ff;
     border-radius: 50%;
     font-size: 40px;
@@ -82,13 +89,13 @@ body{
     line-height: 100px;
 }
 
-.new-listing .item{
-	border-radius: 20px;
+.new-listing .item {
+    border-radius: 20px;
     margin-bottom: 25px;
     padding: 10px 20px;
 }
 
-.new-listing .create-account{
+.new-listing .create-account {
     border-radius: 30px;
     padding: 10px 20px;
     font-size: 1rem;
@@ -98,7 +105,7 @@ body{
     margin-top: 20px;
 }
 
-.new-listing .social-media{
+.new-listing .social-media {
     max-width: 600px;
     background-color: #fff;
     margin: auto;
@@ -111,12 +118,12 @@ body{
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
 }
 
-.new-listing .social-icons{
+.new-listing .social-icons {
     margin-top: 30px;
     margin-bottom: 16px;
 }
 
-.new-listing .social-icons a{
+.new-listing .social-icons a {
     font-size: 23px;
     margin: 0 3px;
     color: #5691ff;
@@ -130,17 +137,17 @@ body{
     line-height: 45px;
 }
 
-.new-listing .social-icons a:hover{
+.new-listing .social-icons a:hover {
     text-decoration: none;
     opacity: 0.6;
 }
 
 @media (max-width: 576px) {
-    .new-listing form{
+    .new-listing form {
         padding: 50px 20px;
     }
 
-    .new-listing .form-icon{
+    .new-listing .form-icon {
         width: 70px;
         height: 70px;
         font-size: 30px;
@@ -149,6 +156,57 @@ body{
 }
 
 /* new list form end*/
+
+
+/* welcome page css */
+
+.wel {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #d2868f 0%, #ee9ca7 100%);
+
+    color: white;
+}
+
+h1.display-1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.1;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.lead {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.6;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+}
+
+.custom-btn {
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    border: none;
+    color: #764ba2;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    padding: 0.75rem 2.5rem;
+}
+
+.custom-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+
+/* map */
+
+#map {
+    height: 75vh;
+    /* width: 90%; */
+}
 
 .showTax{
     display: none;
@@ -169,3 +227,5 @@ body{
     justify-content: center;
     
 }
+
+

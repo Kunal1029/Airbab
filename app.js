@@ -89,7 +89,7 @@ app.use((req,res,next)=>{
 })
 
 app.get("/", (req, res) => {
-    res.send("Hi")
+    res.render("Welcome.ejs")
 })
 
 app.use("/", userRouter)
