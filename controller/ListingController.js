@@ -77,7 +77,7 @@ module.exports.addNewList = async (req, res, next) => {
     newListing.geometry = response.body.features[0].geometry;
 
     let finalist = await newListing.save();
-    console.log(finalist)
+    // console.log(finalist)
     req.flash("success", "New Listing Created");
     res.redirect("/api/list");
 }
