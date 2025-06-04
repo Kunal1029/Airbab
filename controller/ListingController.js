@@ -1,5 +1,9 @@
+const { access } = require("fs");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({accessToken: mapToken})
 
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({}).populate("owner");
@@ -22,13 +26,13 @@ module.exports.show = async (req, res) => {
     const Onelisting = await Listing.findById(id)
         .populate("owner")
         .populate({ path: "reviews", populate: { path: "author" } });
-    console.log(Onelisting);
+    // console.log(Onelisting);
     if (!Onelisting) {
         req.flash("error", "Listing Doesn't exist.");
         res.redirect("/api/list");
     }
-    // console.log(Onelisting)
-    res.render("listings/show.ejs", { Onelisting });
+
+    res.render("listings/show.ejs", { Onelisting , MAP_TOKEN: process.env.MAP_TOKEN });
 }
 
 module.exports.editList = async (req, res) => {
@@ -54,14 +58,26 @@ module.exports.addNewList = async (req, res, next) => {
     // if(validateSchemaError.error){
     //     throw new ExpressError(400, validateSchemaError.error)
     // }
+
+    
     let url = req.file.path;
     let filename = req.file.filename;
     // console.log(url + " "+ filename)
     const newListing = new Listing(req.body.list);
-    // console.log(req.user);
+
     newListing.owner = req.user._id; //we need to also save owner details who created post.
     newListing.image = {url, filename}
-    await newListing.save();
+
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.list.location,
+        limit: 1
+    })
+    .send();
+
+    newListing.geometry = response.body.features[0].geometry;
+
+    let finalist = await newListing.save();
+    console.log(finalist)
     req.flash("success", "New Listing Created");
     res.redirect("/api/list");
 }

@@ -1,7 +1,12 @@
 <% layout('/layout/boilerplate.ejs') -%>
+<script>
+  const mapToken = "<%= MAP_TOKEN %>"
+  const lis = <%- JSON.stringify(Onelisting) %>;
+</script>
 
   <div class="container">
     <h3 class="text-center mb-4 mt-4">Listing Details :</h3>
+
     <div class="row col-6 m-auto">
       <div class="card">
         <img src="<%= Onelisting.image.url %>" style="height: 20rem" class="card-img-top" alt="..." />
@@ -48,7 +53,7 @@
     <hr />
 
     <div class="mb-5 d-flex">
-      <div class="col-6">
+      <div class="<%= Onelisting.reviews.length > 0 ? 'col-6' : 'col-12' %>">
         <h4 class="mt-4 text-center mb-3">Please Leave a Review <%= %>
         </h4>
 
@@ -91,42 +96,55 @@
 
       </div>
 
-      <div class="col-6">
-        <h4 class="mt-4 text-center">
-          All Reviews on <b class="text-warning"> "<%= Onelisting.title %>"</b>
-        </h4>
-        <div class="ms-5 mt-5">
-          <% for(review of Onelisting.reviews) { %>
-            <div class="border p-3 mb-3">
-              <p class="p-2 col-8">
-                Comment: <%= review.comment %>,<br />Rating:
-                  Star
-              </p>
-              <p class="starability-result" data-rating=<%=review.rating %>>
-              </p>
-              <p>comment by : @<%= review.author.username %>
-              </p>
+      <% if(Onelisting.reviews.length>0) { %>
+        <div class="col-6">
 
-              <% if(review.author._id.toString()===currentUser._id.toString()) { %>
-                <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE" method="post">
-                  <button class="btn btn-dark mb-2 mt-2">Delete</button>
-                </form>
+          <h4 class="mt-4 text-center">
+            All Reviews on <b class="text-warning"> "<%= Onelisting.title %>"</b>
+          </h4>
+          <div class="ms-5 mt-5">
+            <% for(review of Onelisting.reviews) { %>
+              <div class="border p-3 mb-3">
+                <p class="p-2 col-8">
+                  Comment: <%= review.comment %>,<br />Rating:
+                    Star
+                </p>
+                <p class="starability-result" data-rating=<%=review.rating %>>
+                </p>
+                <p>comment by : @<%= review.author.username %>
+                </p>
 
-                <form // action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
-                  method="post">
-                  <button class="btn btn-dark mb-2 mt-2">Reply</button>
-                </form>
-                <% } else { %>
-                  <form // action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+                <% if(review.author._id.toString()===currentUser._id.toString()) { %>
+                  <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+                    method="post">
+                    <button class="btn btn-dark mb-2 mt-2">Delete</button>
+                  </form>
+
+                  <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
                     method="post">
                     <button class="btn btn-dark mb-2 mt-2">Reply</button>
-
                   </form>
-                  <% } %>
+                  <% } else { %>
+                    <form action="/api/review/<%= Onelisting._id %>/review/<%= review._id %>?_method=DELETE"
+                      method="post">
+                      <button class="btn btn-dark mb-2 mt-2">Reply</button>
 
-            </div>
-            <% } %>
+                    </form>
+                    <% } %>
+
+              </div>
+              <% } %>
+          </div>
         </div>
-      </div>
+        <% } %>
     </div>
+    <hr>
+
+    <div class="col-12 text-center mb-3">
+      <h3 class="text-center">Where you'll be </h3>
+      <div id="map" class="mb-5 mt-5"></div>
+    </div>
+
   </div>
+
+<script src="/js/map.js"></script>

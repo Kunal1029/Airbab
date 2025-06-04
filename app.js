@@ -7,7 +7,7 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path")
 const methodOverride = require("method-override");
-const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust2";
+const mongoUrl = process.env.MONGO_URL;
 const engine = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js")
 const Lrouter = require("./Routes/ListingRoute.js")
@@ -74,7 +74,7 @@ app.use((req,res,next)=>{
 })
 
 app.get("/", (req, res) => {
-    res.send("Hi")
+    res.render("Welcome.ejs")
 })
 
 app.use("/", userRouter)
